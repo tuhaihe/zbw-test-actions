@@ -12,7 +12,7 @@ jobs:
       - run: mkdir aaa
         # 创建一个名为aaa的文件夹
       - run: mkdir aaa
-        continue-on-error: true
+        # continue-on-error: true
         # 创建一个名为bbb的文件夹
       - name: Handle Failure
         if: failure()
