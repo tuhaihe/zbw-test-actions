@@ -1,27 +1,37 @@
 name: GitHub Actions Demo
 on:
   push:
-
+    # 当有代码推送时触发工作流程
 
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+        # 输出当前工作流程的触发事件类型
       - run: mkdir aaa
-      - run: mkdir aaa
+        # 创建一个名为aaa的文件夹
+      - run: mkdir bbb
+        # 创建一个名为bbb的文件夹
       - name: Handle Failure
         if: failure()
         run: |
-           echo "The previous step failed. Handling failure..."
-                # Add your failure handling logic here
+          echo "The previous step failed. Handling failure..."
+          # 在这里添加处理作业失败的特定步骤，比如发送通知或记录错误信息
       - name: Rerun workflow on error
         if: failure()
         run: |
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer ${{ GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/rerun-failed-jobs
+            -H "Authorization: Bearer ${{ secrets.RETRY_JOB }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/rerun
+          # 重新运行整个工作流程
 
-            #secrets.RETRY_JOB
+  Failing-Job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job intentionally fails."
+        # 故意使作业失败
+        continue-on-error: true
+        # 设置continue-on-error为true，以便作业失败时不会中断整个工作流程
