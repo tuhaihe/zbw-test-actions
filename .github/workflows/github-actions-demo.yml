@@ -11,7 +11,8 @@ jobs:
         # 输出当前工作流程的触发事件类型
       - run: mkdir aaa
         # 创建一个名为aaa的文件夹
-      - run: mkdir bbb
+      - run: mkdir aaa
+        continue-on-error: true
         # 创建一个名为bbb的文件夹
       - name: Handle Failure
         if: failure()
@@ -28,10 +29,3 @@ jobs:
             https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/rerun
           # 重新运行整个工作流程
 
-  Failing-Job:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "This job intentionally fails."
-        # 故意使作业失败
-        continue-on-error: true
-        # 设置continue-on-error为true，以便作业失败时不会中断整个工作流程
